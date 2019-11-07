@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2020.02.0
 
 ### Added
+- Algorithms
+  * PPO in PyTorch ([#905](https://github.com/rlworkgroup/garage/pull/905))
 
 ### Changed
 
