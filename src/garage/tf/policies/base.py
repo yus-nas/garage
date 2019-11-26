@@ -291,3 +291,12 @@ class StochasticPolicy(Policy):
                 received the observation
 
         """
+
+
+class StochasticPolicy2(Policy):
+    """StochasticPolicy."""
+
+    @property
+    @abc.abstractmethod
+    def distribution(self):
+        """Distribution."""
