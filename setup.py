@@ -55,15 +55,22 @@ EXTRAS['all'] = list(set(sum(EXTRAS.values(), [])))
 # dependencies for using gpu, not included in 'all'
 EXTRAS['gpu'] = ['tensorflow-gpu' + TF_VERSION]
 
+# Dependencies for running benchmarks, not included in 'all'
+EXTRAS['benchmarks'] = [
+    # Please keep alphabetized
+    'baselines @ https://api.github.com/repos/openai/baselines/tarball/f2729693253c0ef4d4086231d36e0a4307ec1cb3',  # noqa: E501
+    'gtimer',
+    'pandas',
+    'rlkit @ git+https://github.com/vitchyr/rlkit/@1d469a509b797ca04a39b8734c1816ca7d108fc8',  # noqa: E501
+    'seaborn',
+]
+
 # Development dependencies (*not* included in 'all')
 EXTRAS['dev'] = [
     # Please keep alphabetized
-    'baselines @ https://api.github.com/repos/openai/baselines/tarball/f2729693253c0ef4d4086231d36e0a4307ec1cb3',  # noqa: E501
     'flake8',
     'flake8-docstrings>=1.5.0',
     'flake8-import-order',
-    'gtimer',
-    'pandas',
     'pep8-naming==0.7.0',
     'pre-commit',
     'pycodestyle>=2.5.0',
@@ -74,8 +81,6 @@ EXTRAS['dev'] = [
     'pytest-timeout',
     'pytest-xdist',
     'recommonmark',
-    'rlkit @ git+https://github.com/vitchyr/rlkit/@1d469a509b797ca04a39b8734c1816ca7d108fc8',  # noqa: E501
-    'seaborn',
     'sphinx',
     'sphinx_rtd_theme',
     'yapf==0.28.0',
