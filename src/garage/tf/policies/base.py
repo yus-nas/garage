@@ -257,12 +257,12 @@ class Policy(abc.ABC):
 
 
 class StochasticPolicy(Policy):
-    """StochasticPolicy."""
+    """Base class for stochastic policy in TensorFlow."""
 
     @property
     @abc.abstractmethod
     def distribution(self):
-        """Distribution."""
+        """Distribution to parameterize the policy."""
 
     @abc.abstractmethod
     def dist_info_sym(self, obs_var, state_info_vars, name='dist_info_sym'):
@@ -294,9 +294,9 @@ class StochasticPolicy(Policy):
 
 
 class StochasticPolicy2(Policy):
-    """StochasticPolicy."""
+    """Base class for stochastic policy in TensorFlow."""
 
     @property
     @abc.abstractmethod
     def distribution(self):
-        """Distribution."""
+        """Distribution to parameterize the policy."""
