@@ -79,7 +79,7 @@ class DummyDictEnv(DummyEnv):
         """
         return self.observation_space.sample(), 0, True, dict()
 
-    # pylint: disable=unused-argument, no-self-use
+    # pylint: disable=no-self-use
     def compute_reward(self, achieved_goal, goal, info):
         """Function to compute new reward.
 
@@ -92,4 +92,5 @@ class DummyDictEnv(DummyEnv):
             float: New computed reward.
 
         """
+        del info
         return np.sum(achieved_goal - goal)
