@@ -105,7 +105,7 @@ class TestBenchmarkPPO:  # pylint: disable=too-few-public-methods
             benchmark_helper.plot_average_over_trials(
                 [baselines_csvs, garage_tf_csvs, garage_pytorch_csvs],
                 [
-                    'eprewmean', 'Evaluation/AverageReturn',
+                    'EpRewMean', 'Evaluation/AverageReturn',
                     'Evaluation/AverageReturn'
                 ],
                 plt_file=plt_file,
@@ -116,16 +116,13 @@ class TestBenchmarkPPO:  # pylint: disable=too-few-public-methods
             )
 
             result_json[env_id] = benchmark_helper.create_json(
-                [baselines_csvs, garage_tf_csvs, garage_pytorch_csvs],
+                [garage_tf_csvs, garage_pytorch_csvs],
                 seeds=seeds,
                 trials=hyper_parameters['n_trials'],
-                xs=['nupdates', 'Iteration', 'Iteration'],
-                ys=[
-                    'eprewmean', 'Evaluation/AverageReturn',
-                    'Evaluation/AverageReturn'
-                ],
-                factors=[hyper_parameters['batch_size']] * 3,
-                names=['baseline', 'garage-TF', 'garage-PT'])
+                xs=['Evaluation/Iteration', 'Evaluation/Iteration'],
+                ys=['Evaluation/AverageReturn', 'Evaluation/AverageReturn'],
+                factors=[hyper_parameters['batch_size']] * 2,
+                names=['garage-TF', 'garage-PT'])
 
         Rh.write_file(result_json, 'TRPO')
 
@@ -153,11 +150,11 @@ def run_garage_pytorch(env, seed, log_dir):
                          hidden_nonlinearity=torch.tanh,
                          output_nonlinearity=None)
 
-    baseline = LinearFeatureBaseline(env_spec=env.spec)
+    value_function = LinearFeatureBaseline(env_spec=env.spec)
 
     algo = PyTorch_TRPO(env_spec=env.spec,
                         policy=policy,
-                        baseline=baseline,
+                        value_function=value_function,
                         max_kl_step=hyper_parameters['max_kl'],
                         max_path_length=hyper_parameters['max_path_length'],
                         discount=hyper_parameters['discount'],
