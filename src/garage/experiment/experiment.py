@@ -345,13 +345,16 @@ class ExperimentTemplate:
             will be used), or 'passed' (only passed parameters will be used).
             The used parameters will be inserted in the order they appear in
             the function definition.
+        use_existing_dir (bool): If true, (re)use the directory for this
+            experiment, even if it already contains data.
 
     """
 
     # pylint: disable=too-few-public-methods
 
     def __init__(self, *, function, log_dir, name, prefix, snapshot_mode,
-                 snapshot_gap, archive_launch_repo, name_parameters):
+                 snapshot_gap, archive_launch_repo, name_parameters,
+                 use_existing_dir):
         self.function = function
         self.log_dir = log_dir
         self.name = name
@@ -360,6 +363,7 @@ class ExperimentTemplate:
         self.snapshot_gap = snapshot_gap
         self.archive_launch_repo = archive_launch_repo
         self.name_parameters = name_parameters
+        self.use_existing_dir = use_existing_dir
         if self.function is not None:
             self._update_wrap_params()
 
@@ -442,6 +446,7 @@ class ExperimentTemplate:
                        archive_launch_repo=self.archive_launch_repo,
                        snapshot_gap=self.snapshot_gap,
                        snapshot_mode=self.snapshot_mode,
+                       use_existing_dir=self.use_existing_dir,
                        signature=self.__signature__)
         if args:
             if len(args) == 1 and isinstance(args[0], dict):
@@ -481,7 +486,10 @@ class ExperimentTemplate:
                 data=os.path.join(os.getcwd(), 'data'),
                 prefix=options['prefix'],
                 name=name))
-        log_dir = _make_sequential_log_dir(log_dir)
+        if options['use_existing_dir']:
+            os.makedirs(log_dir, exist_ok=True)
+        else:
+            log_dir = _make_sequential_log_dir(log_dir)
 
         tabular_log_file = os.path.join(log_dir, 'progress.csv')
         text_log_file = os.path.join(log_dir, 'debug.log')
@@ -552,7 +560,8 @@ def wrap_experiment(function=None,
                     snapshot_mode='last',
                     snapshot_gap=1,
                     archive_launch_repo=True,
-                    name_parameters=None):
+                    name_parameters=None,
+                    use_existing_dir=False):
     """Decorate a function to turn it into an ExperimentTemplate.
 
     When invoked, the wrapped function will receive an ExperimentContext, which
@@ -597,6 +606,8 @@ def wrap_experiment(function=None,
             will be used), or 'passed' (only passed parameters will be used).
             The used parameters will be inserted in the order they appear in
             the function definition.
+        use_existing_dir (bool): If true, (re)use the directory for this
+            experiment, even if it already contains data.
 
     Returns:
         callable: The wrapped function.
@@ -609,7 +620,8 @@ def wrap_experiment(function=None,
                               snapshot_mode=snapshot_mode,
                               snapshot_gap=snapshot_gap,
                               archive_launch_repo=archive_launch_repo,
-                              name_parameters=name_parameters)
+                              name_parameters=name_parameters,
+                              use_existing_dir=use_existing_dir)
 
 
 def dump_json(filename, data):
